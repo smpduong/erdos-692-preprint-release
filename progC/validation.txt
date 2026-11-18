@@ -1,0 +1,4 @@
+cases 188 mismatches 0
+Known values (progC): delta1(4,9)=5/14, (5,12)=1109/3465, (6,12)=1172/3465, (10,22)=528/1729 all exact match.
+delta0(4,434)+delta1(4,434) = 0.3569763532545719
+Timings n=19: M=1000 0.002s, 10000 0.006s, 100000 0.18s, 400000 2.4s (see timings.txt)

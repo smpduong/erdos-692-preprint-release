@@ -1,0 +1,500 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  11pt,
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[OT1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[expansion=false]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Exact Divisor Densities and a Finite-to-Global Certification of Integer Maximizers},
+  pdfauthor={Steven Minh Phat Duong, MPH},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Exact Divisor Densities and a Finite-to-Global Certification of
+Integer Maximizers}
+\usepackage{etoolbox}
+\makeatletter
+\providecommand{\subtitle}[1]{% add subtitle to \maketitle
+  \apptocmd{\@title}{\par {\large #1 \par}}{}{}
+}
+\makeatother
+\subtitle{The cases n = 4 through 20}
+\author{Steven Minh Phat Duong, MPH}
+\date{18 November 2026 -- Preprint; availability correction}
+
+\begin{document}
+\renewcommand{\labelitemi}{$\bullet$}
+\maketitle
+
+Independent Researcher, Calgary, Alberta, Canada
+
+\subsection{Abstract}\label{abstract}
+
+We describe an exact-arithmetic certificate scheme for identifying the
+integer endpoint that maximizes the density of integers having exactly
+one divisor in an open interval \((n,m)\). Two elementary bounds reduce
+an infinite endpoint range to a finite sweep, a chain of bounded
+intervals and one tail inequality. We derive three prime-valuation
+algorithms for the required densities and report certificate-based
+candidate classifications for each fixed \(n=4,\ldots,20\). The listed
+maximizing endpoints are
+\(9,12,12,15,18,20,22,24,24,32,32,32,32,38,38,44,44\). The
+finite-to-global criterion is proved here; the numerical classification
+depends on the correctness of the supplied exact density entries. All 17
+logical certificates were rechecked. The accompanying validation record
+distinguishes complete Program C recomputation from comparisons with
+saved Program A logs. An additional inclusion-exclusion implementation
+reproduces all 17 peak values without using the prime-valuation
+decomposition. The work does not claim a general formula for maximizers,
+a new general existence theorem, independent human review or established
+priority.
+
+\subsection{1. Definitions and result
+scope}\label{definitions-and-result-scope}
+
+Fix integers \(n\ge1\) and \(m>n+1\). Put
+\[D(n,m)=\{d\in\mathbb Z:n<d<m\},\qquad c_m(x)=|\{d\in D(n,m):d\mid x\}|.\]
+For \(j=0,1\), define
+\[\delta_j(n,m)=\lim_{X\to\infty}\frac{|\{1\le x\le X:c_m(x)=j\}|}{X}.\]
+These events are periodic with period \(L=\operatorname{lcm}(D(n,m))\),
+so the limits exist and are rational. For an empty interval use \(L=1\),
+\(\delta_0=1\), \(\delta_1=0\).
+
+The certificate-reported classification is: for each
+\(n\in\{4,\ldots,20\}\), the row of Table 1 below gives the unique
+integer \(m_*>n+1\) for which
+\[\delta_1(n,m)<\delta_1(n,m_*)\quad\text{for every integer }m>n+1,\ m\ne m_*.\]
+This conclusion depends on both the reduction below and the correctness
+of the exact densities in the certificates. The logical checker verifies
+implications between supplied values; it does not establish their
+interpretation as densities.
+
+For a real endpoint \(t\), \(D(n,t)=D(n,\lceil t\rceil)\). Thus the
+density is constant on \((m-1,m]\). Uniqueness concerns the integer
+endpoint, or equivalently the divisor set, rather than an individual
+real endpoint.
+
+\subsection{2. Bounding lemmas and complete endpoint
+coverage}\label{bounding-lemmas-and-complete-endpoint-coverage}
+
+Write \(E_j(m)=\{x:c_m(x)=j\}\). For integers \(a\le m\le b\), nested
+divisor sets give \(c_a\le c_m\le c_b\) pointwise.
+
+\textbf{Block lemma.} For \(a\le m\le b\),
+\[\delta_1(n,m)\le\delta_1(n,a)+\delta_0(n,a)-\delta_0(n,b).\] Indeed,
+\(c_m(x)=1\) implies \(c_a(x)\in\{0,1\}\) and \(c_b(x)\ge1\), so
+\[E_1(m)\subseteq E_1(a)\cup\bigl(E_0(a)\setminus E_0(b)\bigr).\] The
+two sets on the right are disjoint and \(E_0(b)\subseteq E_0(a)\).
+Taking densities proves the bound, including both endpoints.
+
+\textbf{Tail lemma.} For \(m\ge M\),
+\[\delta_1(n,m)\le\delta_0(n,M)+\delta_1(n,M).\] Here \(c_m(x)=1\)
+implies \(c_M(x)\in\{0,1\}\), giving
+\(E_1(m)\subseteq E_0(M)\cup E_1(M)\). Take densities of these disjoint
+events.
+
+\textbf{Proposition (finite-to-global certificate criterion).} Fix \(n\)
+and integers \(n+2\le m_*\le S\le M\). Suppose the exact densities at
+all sweep endpoints \(n+2,\ldots,S\) are supplied, and let
+\(B=\delta_1(n,m_*)>0\). Suppose (i) every other swept value is strictly
+less than \(B\); (ii) there is a contiguous chain of closed integer
+blocks from \(S\) to \(M\) whose block-lemma bounds are strictly less
+than \(B\); and (iii) \(\delta_0(n,M)+\delta_1(n,M)<B\). Then \(m_*\)
+uniquely maximizes \(\delta_1(n,m)\) over all integers \(m>n+1\).
+
+\emph{Proof.} Every admissible endpoint belongs to the sweep, a block,
+or the tail. Condition (i) handles the sweep. The block lemma and
+condition (ii) handle the blocks. The tail lemma and condition (iii)
+handle every endpoint at least \(M\). These sets cover all admissible
+endpoints, and every endpoint except \(m_*\) has density strictly below
+\(B\). For an empty block chain, \(S=M\) and the sweep and tail suffice.
+\(\square\)
+
+Each certificate supplies the exact sweep \(m=n+2,\ldots,1000\), closed
+integer blocks from 1000 to a tail point \(M\), and both densities at
+\(M\). Every nonpeak sweep value, every block bound and the tail bound
+must be strictly below the claimed peak. Adjacent blocks share
+endpoints. Sweep, blocks and tail therefore cover every admissible
+integer endpoint without gaps. For \(n=4\) the block list is empty and
+\(M=1000\). The largest \(M\) is 256875, for \(n=19,20\). Endpoints
+\(m\le n+1\), if considered, give zero and cannot tie a positive peak.
+
+\newpage
+
+\subsubsection{Table 1. Certificate-reported integer
+maximizers}\label{table-1.-certificate-reported-integer-maximizers}
+
+\begin{longtable}[]{@{}rrlr@{}}
+\toprule\noalign{}
+\(n\) & \(m_*\) & \(\delta_1(n,m_*)\) & Tail \(M\) \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+4 & 9 & 5/14 & 1000 \\
+5 & 12 & 1109/3465 & 2875 \\
+6 & 12 & 1172/3465 & 1875 \\
+7 & 15 & 13532/45045 & 8875 \\
+8 & 18 & 14048/45045 & 8875 \\
+9 & 20 & 497888/1616615 & 8875 \\
+10 & 22 & 528/1729 & 16875 \\
+11 & 24 & 10954544/37182145 & 32875 \\
+12 & 24 & 11091536/37182145 & 32875 \\
+13 & 32 & 137993457152/501401225325 & 128875 \\
+14 & 32 & 470752768/1676927175 & 64875 \\
+15 & 32 & 47158954496/167133741775 & 128875 \\
+16 & 32 & 1638932224/5763232475 & 64875 \\
+17 & 38 & 1697006237184/6183948445675 & 128875 \\
+18 & 38 & 1733299766784/6183948445675 & 128875 \\
+19 & 44 & 2897060040192/10741183359335 & 256875 \\
+20 & 44 & 2768951781888/10048203787765 & 256875 \\
+\end{longtable}
+
+The table is a transcription of the unchanged certificate-generated
+results. The classification is conditional on the density values being
+correctly computed.
+
+\subsection{3. Common exact measure}\label{common-exact-measure}
+
+Prime valuations have densities
+\[\Pr(v_p(x)=a)=(1-1/p)p^{-a},\qquad\Pr(v_p(x)\ge a)=p^{-a}.\] Only
+finitely many capped valuations matter: cap at the largest exponent
+occurring in the relevant divisors. The resulting events depend on
+residue classes modulo prime powers. The Chinese remainder theorem
+multiplies their densities, giving independence across these primes.
+Primes greater than \(m-1\) divide no member of \(D(n,m)\). All three
+algorithms share this model, so their agreement is not an independent
+test of it.
+
+\subsection{4. Program A by avoidance
+recursion}\label{program-a-by-avoidance-recursion}
+
+For a finite set \(A\) of positive integers, let \(F(A)\) be the density
+of integers divisible by no member of \(A\). Then \(F(\varnothing)=1\)
+and \(F(A)=0\) if \(1\in A\). Removing an element divisible by another
+member of \(A\) leaves \(F(A)\) unchanged.
+
+Partitioning by the unique divisor gives
+\[\delta_0(n,m)=F(D(n,m)),\qquad\delta_1(n,m)=\sum_{d\in D(n,m)}\frac1d F(A_d),\]
+where \(A_d=\{e/\gcd(e,d):e\in D(n,m),e\ne d\}\). Write \(x=dy\):
+\(e\mid dy\) iff \(e/\gcd(e,d)\mid y\). Multiplication by \(d\) scales
+density by \(1/d\), and the events for different unique divisors are
+disjoint.
+
+For nonempty \(A\) not containing 1, let \(p\) be its largest prime
+factor, \(K=\max_{a\in A}v_p(a)\), and
+\[A_k=\{a/p^{v_p(a)}:a\in A,v_p(a)\le k\},\qquad B=\{a/p^{v_p(a)}:a\in A\}.\]
+Conditioning on \(v_p(y)\) gives
+\[F(A)=\sum_{k=0}^{K-1}\frac{p-1}{p^{k+1}}F(A_k)+\frac1{p^K}F(B).\] The
+last term sums all exponents at least \(K\), whose constraints coincide.
+Every recursive set is \(p\)-free, so the largest relevant prime
+decreases and recursion terminates. Empty sets and sets containing 1
+cover the boundary cases; memoization affects cost only.
+
+Source anchors: \texttt{progA/delta.py}: \texttt{pfac},
+\texttt{primitive}, \texttt{avoid}, \texttt{delta0}, \texttt{delta1};
+\texttt{progA/sweepA.py} records the sweep. The floating-point helper
+\texttt{bound\_crossing} is outside the exact certificate path and is
+not used for these claims.
+
+\subsection{5. Program B by the square-root prime
+split}\label{program-b-by-the-square-root-prime-split}
+
+Put \(h=m-1\). Small primes satisfy \(p^2\le h\); large primes satisfy
+\(q\le h<q^2\). A divisor \(d\le h\) contains at most one large prime,
+to exponent 1: a square or product of two such primes exceeds \(h\).
+
+Condition on the small-prime valuations, and let \(S\) be that part of
+\(x\). Let \(w_0\) count divisors of \(S\) in \([n+1,h]\) and \(w_q\)
+count divisors \(s\mid S\) with \(sq\in[n+1,h]\). Then
+\[c_m(x)=w_0+\sum_{\substack{q\text{ large}\\q\mid x}}w_q.\] For this
+state put \(\Pi=\prod_{w_q\ge1}(1-1/q)\) and \(A_1=\{q:w_q=1\}\). If
+\(w_0=0\), the conditional contributions to \((\delta_0,\delta_1)\) are
+\((\Pi,\Pi\sum_{q\in A_1}1/(q-1))\). If \(w_0=1\), they are \((0,\Pi)\).
+If \(w_0\ge2\), both are zero. These follow from independent
+divisibility by the large primes.
+
+For each small prime \(p\), let \(a_{\max}=\max\{a:p^a\le h\}\).
+Enumerate exact exponents below \(a_{\max}\) with weights
+\((p-1)/p^{a+1}\) and the tail with weight \(p^{-a_{\max}}\). Higher
+exponents create no additional divisor at most \(h\). Each DFS step
+generates all divisors of the partial product at most \(h\); larger
+divisors can be discarded because later multiplication cannot shrink
+them. Once two divisors lie in the interval, every extension still has
+at least two. That state contributes to neither density, justifying
+pruning; the same monotonicity in the current exponent justifies the
+loop break.
+
+Source anchors: \texttt{progB/verify.py}: \texttt{dens}, its nested
+\texttt{dfs}/\texttt{leaf}, and \texttt{set\_prime\_limit}. The current
+code \textbf{enforces} \(n\ge1\) and \(m-1\le\texttt{PR\_N}\). Its
+default limit is 1000; \texttt{gen\_cert.py} sets it to \texttt{mmax+10}
+before larger runs. These guards do not change successful density
+values.
+
+\subsection{6. Program C by primes in the open
+interval}\label{program-c-by-primes-in-the-open-interval}
+
+Let \(s(x)\) be the part of \(x\) supported on primes at most \(n\), and
+\(\mathcal Q=\{Q\text{ prime}:n<Q<m\}\). Two distinct primes from
+\(\mathcal Q\) already give two divisors in \(D(n,m)\), so only zero or
+one can contribute.
+
+For \(q\le n\) prime, let \(c_q\) be the least exponent with
+\(q^{c_q}\ge m\). Use exact weights below \(c_q\) and tail weight
+\(q^{-c_q}\) at \(c_q\). Higher exponents enter no relevant divisor. Let
+\(S_j\) be the total small-prime weight for exactly \(j\) divisors in
+\(D(n,m)\) and \(P_n=\prod_{Q\in\mathcal Q}(1-1/Q)\). With no interval
+prime, the contributions are \(P_nS_0\) and \(P_nS_1\).
+
+If exactly one interval prime \(Q\) divides \(x\), \(Q\) is the required
+divisor. There must be no divisor of \(s(x)\) in the interval. If
+\(Q^2<m\), its valuation must be exactly 1; otherwise any positive
+valuation is allowed. Every prime factor \(q\) of \(s(x)\) must satisfy
+\(qQ\ge m\), or \(qQ\) would be a second divisor. Conversely, these
+restrictions exclude every other mixed divisor: for \(s>1\),
+\(sQ^a\ge qQ\ge m\), and powers of \(Q\) alone are excluded by the
+valuation restriction.
+
+Put \(\theta=\lceil m/Q\rceil\),
+\(R_\theta=\{q\le n:q\text{ prime},q\ge\theta\}\) and
+\[Z_\theta=W_0(R_\theta)\prod_{\substack{q\le n\text{ prime}\\q<\theta}}(1-1/q),\]
+where \(W_0(R_\theta)\) is the weight of states supported on
+\(R_\theta\) having no interval divisor. Dividing the permitted
+\(Q\)-valuation weight by its factor \(1-1/Q\) in \(P_n\) gives
+\[\delta_0=P_nS_0,\qquad\delta_1=P_n\left(S_1+\sum_{Q\in\mathcal Q}Z_{\lceil m/Q\rceil}\alpha_Q\right),\quad
+\alpha_Q=\begin{cases}1/Q&Q^2<m,\\1/(Q-1)&Q^2\ge m.\end{cases}\]
+Grouping equal allowed-prime sets and using tree sums/products changes
+only evaluation order. The DFS adds disjoint divisor layers as exponents
+increase; the count is monotone, so it can prune at two interval
+divisors (or one for \(W_0\)). Empty intervals give \((1,0)\), and
+\(n=1\) has an empty small-prime set. The code enforces \(n\ge1\).
+
+Source anchors: \texttt{progC/progC.py}: \texttt{compute}, nested
+\texttt{wt}/\texttt{enum}, \texttt{tree\_prod} and
+\texttt{tree\_sum\_inv}.
+
+\subsection{7. Evidence and the trust
+boundary}\label{evidence-and-the-trust-boundary}
+
+\texttt{progB/gen\_cert.py} generated 17 compressed certificates.
+\texttt{checker/check\_cert.py} uses exact fractions and no density
+engine: it checks coverage, a unique swept maximum, consistency at
+repeated points, and strict block/tail inequalities.
+\texttt{checker/compare\_C.py} recomputes the certificate values with C;
+\texttt{checker/compare\_A.py} compares against saved A logs. Default
+\texttt{replay.sh} reruns C and the validators, but \textbf{does not
+rerun A}. Full mode reruns all 16779 swept values with A and costs
+several CPU-hours. The dated validation record specifies the replay mode
+completed for this version; full mode is distinct from default replay.
+
+The stored bundle reports period-counting checks of 197 B cases, 188 C
+cases and 5166 lemma cases, with no mismatches, plus logical, negative
+and failure-propagation tests. Those are recorded checks. The earlier
+audit also reports A/B/C agreement on 900 small pairs; its original text
+is retained in the earlier review snapshot. The earlier audit was
+AI-assisted, not independent human review.
+
+The algorithms share the valuation model, Python integer arithmetic and
+\texttt{Fraction}. Different decompositions reduce some risks but do not
+eliminate correlated errors. C had an early bug caught by brute-force
+validation and corrected before certificate comparisons.
+\texttt{legacy/} runs and original reports remain available; their
+exploratory sweep/tail parameters do not describe the current
+certificates. Successful computational checks do not establish human
+mathematical acceptance or novelty.
+
+\subsection{8. Relation to earlier work}\label{relation-to-earlier-work}
+
+Cambie's \href{https://arxiv.org/abs/2501.10333}{paper on unimodularity}
+addresses unimodality. His
+\href{https://github.com/StijnCambie/ErdosProblems/blob/main/Erdosproblem692/n_le20.ipynb}{n\_le20
+notebook} displays rounded values for \(m=n+2,\ldots,n+15\). For
+\(n=4,\ldots,12\) the candidate peak locations are visible in that
+window; exclusion of all later endpoints is a different claim. For
+\(n=13,\ldots,20\) the candidate maximizers lie outside it.
+\href{https://github.com/KitaKen1/erdos-692-part-ii-lean}{KitaKen1's
+Lean development} states general existence of a maximum. That theorem is
+not claimed here as new, and its Lean build was not replayed. See also
+the \href{https://www.erdosproblems.com/692}{problem statement}. Novelty
+remains provisional.
+
+The proposed contribution is a reproducible finite-parameter
+classification with exclusion of all later integer endpoints. It is not
+the general existence theorem or a resolution of the unimodality
+question. A comprehensive later-literature and repository comparison
+remains outstanding, and no priority claim is made. The accessible
+prior-work sources were checked on 18 November 2026; the Lean proof was
+not built.
+
+\subsection{9. Reproducibility and
+limitations}\label{reproducibility-and-limitations}
+
+Use \textbf{Python 3.11+}, standard library only, for the certificate
+pipeline. \texttt{gen\_cert.py} uses
+\texttt{sys.set\_int\_max\_str\_digits}; exact fractions can contain
+very large integers. Readers disable the decimal-digit conversion limit
+where needed. Replay scripts use a POSIX shell; integrity can be checked
+with \texttt{sha256sum} or macOS \texttt{shasum\ -a\ 256}.
+
+Historical audit records are preserved separately. The supplied
+certificates, numerical results and original density algorithms are
+unchanged. New validation and packaging changes are recorded explicitly.
+
+\subsubsection{Validation of the packaged
+computation}\label{validation-of-the-packaged-computation}
+
+The accompanying package includes all 17 certificates and all 17 saved
+Program A sweep logs. The logical checker verifies coverage and strict
+rational inequalities; it does not recompute densities. Default replay
+separately validates the density engines on small periods, recomputes
+every certificate density using Program C, compares every swept value
+with the saved Program A output, and tests that deliberately corrupted
+copies fail. Full mode additionally regenerates Program A's complete
+sweep; it must not be conflated with default replay. On 18 November
+2026, the complete default replay finished with exit status zero: all 17
+Program C certificate comparisons and all saved-A comparisons had zero
+discrepancies, all logical and small-period checks passed, and all three
+end-to-end corruption tests failed as intended. The 14 negative tests
+and five logical-checker fixtures also passed. Full-mode regeneration of
+Program A was not performed. Logs are supplied in \texttt{validation/}
+and \texttt{RELEASE-STATUS.md}.
+
+As an additional check, weighted inclusion-exclusion was implemented
+using least-common-multiple states. For every finite divisor set \(D\),
+\[\delta_1=\sum_{\varnothing\ne A\subseteq D}\frac{(-1)^{|A|+1}|A|}{\operatorname{lcm}(A)}.\]
+For an integer divisible by exactly \(r\) members of \(D\), its
+coefficient is \(\sum_{k=1}^{r}(-1)^{k+1}k\binom{r}{k}\), equal to one
+when \(r=1\) and zero otherwise. Averaging periodic divisibility
+indicators gives the formula. Inclusion-exclusion is standard and also
+appears in Cambie's notebook; it is not claimed as new.
+
+The new implementation groups subsets by their LCM. For each LCM \(L\),
+it stores \(a_L=\sum_A(-1)^{|A|}\) and \(b_L=\sum_A(-1)^{|A|}|A|\).
+Initially \((a_1,b_1)=(1,0)\). When a divisor \(d\) is added, exclusion
+preserves the old pair; inclusion adds \((-a_L,-b_L-a_L)\) at
+\(\operatorname{lcm}(L,d)\). The required density is \(-\sum_L b_L/L\).
+This recurrence reproduces the 17 exact peak fractions and agrees with
+54 direct finite-period counts. It independently checks peak heights,
+not exclusion of every later endpoint. Like the other implementations,
+it uses Python integers and rational arithmetic and was AI-assisted.
+
+\subsubsection{Data and code
+availability}\label{data-and-code-availability}
+
+The preprint and supporting v3 archive are available in the published
+Zenodo record \href{https://doi.org/10.5281/zenodo.24338898}{10.5281/zenodo.24338898},
+deposited on 18 November 2026 with record version label \texttt{1.0-draft}.
+The archive contains the mathematical derivation, unchanged exact
+certificates, density engines, saved logs, inclusion-exclusion checkers,
+replay scripts and integrity manifests. This corrected manuscript updates
+availability and publication-status wording only; it does not change the
+mathematical claims or numerical results. 
+
+The record displays a CC BY 4.0 licence. This reports the repository
+metadata; it does not independently establish ownership of every included
+file, resolve any adapted-source obligations, or override applicable
+third-party notices, including those for embedded fonts. Publication of a
+preprint is not peer review.
+
+The historical full audit archive has SHA-256
+
+\texttt{31a4b78ded4bb9f18e3f8fb3f0470d9f39130be348ec047c70446cc42cfba777}.
+
+The exact supporting-archive file inventory is in its manifest. The
+original archive and earlier review snapshots are preserved separately.
+This manuscript does not imply that a repository's latest branch was
+audited.
+
+\subsubsection{AI assistance and
+responsibility}\label{ai-assistance-and-responsibility}
+
+AI tools assisted the mathematical development, implementations,
+computational runs, audits and manuscript preparation. Agreement between
+AI-assisted implementations is not independent human mathematical
+review. Responsibility for the mathematical claims and interpretation
+rests with the author. No faculty endorsement, institutional
+affiliation, peer review or formal verification of this classification
+is claimed. This manuscript is a preprint, not a peer-reviewed article.
+
+\subsection{References}\label{references}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Stijn Cambie. \emph{Resolution of Erdős' problems about
+  unimodularity}. Journal of Number Theory \textbf{280} (2026),
+  271--277. \href{https://doi.org/10.1016/j.jnt.2025.08.014}{Published
+  article}; \href{https://arxiv.org/abs/2501.10333}{accessible
+  preprint}.
+\item
+  Stijn Cambie. \emph{ErdosProblems}, problem 692 notebooks.
+  \href{https://github.com/StijnCambie/ErdosProblems/tree/main/Erdosproblem692}{Repository}.
+\item
+  KitaKen1. \emph{Erdős Problem 692, Part II: existence of a maximum},
+  Lean repository.
+  \href{https://github.com/KitaKen1/erdos-692-part-ii-lean}{Repository}.
+\item
+  \emph{Erdős Problems}, problem 692. https://www.erdosproblems.com/692
+\end{enumerate}
+
+\end{document}

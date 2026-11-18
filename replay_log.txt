@@ -1,0 +1,95 @@
+1. checker self-tests (1 valid + 4 corrupted certificates)
+wrote 5 certificates to /tmp/claude-0/-home-user/5a283ccf-64d0-5215-8f29-415529d1afa7/scratchpad/audit692/checker/tests/cases
+ok   expect=0 got=0 valid.json.gz
+     n=4 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 2 blocks, [tail_M, inf) by tail lemma; unique maximizer m=7, value=0.3333333333333333 (float), second best m=8 value=0.25 gap=0.08333333333333333
+ok   expect=1 got=1 bad_tie.json.gz
+     FAIL /tmp/claude-0/-home-user/5a283ccf-64d0-5215-8f29-415529d1afa7/scratchpad/audit692/checker/tests/cases/bad_tie.json.gz: sweep tie or larger value: maximizer not unique
+ok   expect=1 got=1 bad_gap.json.gz
+     FAIL /tmp/claude-0/-home-user/5a283ccf-64d0-5215-8f29-415529d1afa7/scratchpad/audit692/checker/tests/cases/bad_gap.json.gz: block 1 = [13,16] not contiguous
+ok   expect=1 got=1 bad_bound.json.gz
+     FAIL /tmp/claude-0/-home-user/5a283ccf-64d0-5215-8f29-415529d1afa7/scratchpad/audit692/checker/tests/cases/bad_bound.json.gz: block [9,12]: bound 0.3333333333333333 not strictly below peak
+ok   expect=1 got=1 bad_tail.json.gz
+     FAIL /tmp/claude-0/-home-user/5a283ccf-64d0-5215-8f29-415529d1afa7/scratchpad/audit692/checker/tests/cases/bad_tail.json.gz: tail bound d0(M)+d1(M) not strictly below peak
+
+ALL TESTS PASSED
+2. negative tests for compare_A, compare_C and the B/C/lemma validators
+ok   compareA_empty_log: n=4: 0 sweep values equal to Program A, 0 differ, 995 missing; FAIL: 995 sweep m missing from A log (6..1000); no values compared
+ok   compareA_missing_m: n=4: 994 sweep values equal to Program A, 0 differ, 1 missing; FAIL: 1 sweep m missing from A log (500..500)
+ok   compareA_wrong_value: n=4: 994 sweep values equal to Program A, 1 differ, 0 missing
+ok   compareA_duplicate_row: n=4: 995 sweep values equal to Program A, 0 differ, 0 missing; FAIL: duplicate log row m=20
+ok   compareA_wrong_n_row: n=4: 995 sweep values equal to Program A, 0 differ, 0 missing; FAIL: log row for n=5
+ok   compareC_value: n=4: 996 certificate values recomputed by Program C, 1 differ
+ok   compareC_missing: n=4: 996 certificate values recomputed by Program C, 0 differ; FAIL: Program C rows missing 1 / extra 0
+ok   compareC_duplicate: n=4: 996 certificate values recomputed by Program C, 0 differ; FAIL: duplicate Program C row M=8
+ok   compareC_wrong_n: n=4: 996 certificate values recomputed by Program C, 0 differ; FAIL: Program C row for n=5; Program C rows missing 1 / extra 0
+ok   compareC_conflicting_claims: n=4: 996 certificate values recomputed by Program C, 1 differ; FAIL: conflicting certificate claims for (1000, 'delta1')
+ok   checker_conflicting_claims: FAIL /tmp/tmp.1JNGsqdZlM/conf.json.gz: points[m0].delta1 != sweep value at m0
+ok   validatorB_injected_fault: VALIDATION FAIL
+ok   validatorC_injected_fault: VALIDATION FAIL
+ok   lemmacheck_injected_fault: block/tail lemma brute-force checks 5166 violations 13
+ALL NEGATIVE TESTS PASSED
+3. brute-force validators (B: 197 cases, C: 188 cases, lemmas: 5166 cases)
+B validator PASS
+VALIDATION PASS
+block/tail lemma brute-force checks 5166 violations 0
+4. logic + exact inequalities of all 17 certificates
+n=10 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 7 blocks, [tail_M, inf) by tail lemma; unique maximizer m=22, value=0.30537883169462116 (float), second best m=21 value=0.30373589259038175 gap=0.001642939104239414
+n=11 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 8 blocks, [tail_M, inf) by tail lemma; unique maximizer m=24, value=0.29461839815857854 (float), second best m=26 value=0.2887684505560397 gap=0.0058499476025387995
+n=12 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 8 blocks, [tail_M, inf) by tail lemma; unique maximizer m=24, value=0.2983027471922343 (float), second best m=26 value=0.2934967415139713 gap=0.004806005678263048
+n=13 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 10 blocks, [tail_M, inf) by tail lemma; unique maximizer m=32, value=0.27521563606581717 (float), second best m=27 value=0.2732877299036944 gap=0.0019279061621228198
+n=14 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 9 blocks, [tail_M, inf) by tail lemma; unique maximizer m=32, value=0.2807234416724149 (float), second best m=30 value=0.27679772326185964 gap=0.003925718410555289
+n=15 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 10 blocks, [tail_M, inf) by tail lemma; unique maximizer m=32, value=0.2821629791516705 (float), second best m=30 value=0.27579300553636915 gap=0.006369973615301316
+n=16 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 9 blocks, [tail_M, inf) by tail lemma; unique maximizer m=32, value=0.28437725375636524 (float), second best m=34 value=0.2832826274405954 gap=0.0010946263157698636
+n=17 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 10 blocks, [tail_M, inf) by tail lemma; unique maximizer m=38, value=0.2744211488973314 (float), second best m=36 value=0.27051584284438546 gap=0.0039053060529459054
+n=18 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 10 blocks, [tail_M, inf) by tail lemma; unique maximizer m=38, value=0.28029013857582447 (float), second best m=36 value=0.27446879688576276 gap=0.0058213416900616795
+n=19 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 11 blocks, [tail_M, inf) by tail lemma; unique maximizer m=44, value=0.26971516482624874 (float), second best m=42 value=0.26820684580813875 gap=0.001508319018109999
+n=20 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 11 blocks, [tail_M, inf) by tail lemma; unique maximizer m=44, value=0.2755668416338809 (float), second best m=42 value=0.27402511769404525 gap=0.0015417239398356642
+n=4 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 0 blocks, [tail_M, inf) by tail lemma; unique maximizer m=9, value=0.35714285714285715 (float), second best m=8 value=0.3523809523809524 gap=0.004761904761904762
+n=5 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 4 blocks, [tail_M, inf) by tail lemma; unique maximizer m=12, value=0.32005772005772004 (float), second best m=14 value=0.3180819180819181 gap=0.001975801975801976
+n=6 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 3 blocks, [tail_M, inf) by tail lemma; unique maximizer m=12, value=0.33823953823953823 (float), second best m=14 value=0.33726273726273726 gap=0.0009768009768009768
+n=7 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 6 blocks, [tail_M, inf) by tail lemma; unique maximizer m=15, value=0.3004107004107004 (float), second best m=16 value=0.29832389832389833 gap=0.002086802086802087
+n=8 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 6 blocks, [tail_M, inf) by tail lemma; unique maximizer m=18, value=0.3118659118659119 (float), second best m=20 value=0.30864821453056746 gap=0.003217697335344394
+n=9 PASS: m in [n+2, m0] by exact sweep, [m0, tail_M] by 6 blocks, [tail_M, inf) by tail lemma; unique maximizer m=20, value=0.3079818014802535 (float), second best m=18 value=0.2966131907308378 gap=0.011368610749415703
+5. Program C recomputes every density in every certificate
+n=4: 996 certificate values recomputed by Program C, 0 differ
+n=5: 1003 certificate values recomputed by Program C, 0 differ
+n=6: 1000 certificate values recomputed by Program C, 0 differ
+n=7: 1005 certificate values recomputed by Program C, 0 differ
+n=8: 1004 certificate values recomputed by Program C, 0 differ
+n=9: 1003 certificate values recomputed by Program C, 0 differ
+n=10: 1004 certificate values recomputed by Program C, 0 differ
+n=11: 1005 certificate values recomputed by Program C, 0 differ
+n=12: 1004 certificate values recomputed by Program C, 0 differ
+n=13: 1007 certificate values recomputed by Program C, 0 differ
+n=14: 1004 certificate values recomputed by Program C, 0 differ
+n=15: 1005 certificate values recomputed by Program C, 0 differ
+n=16: 1002 certificate values recomputed by Program C, 0 differ
+n=17: 1003 certificate values recomputed by Program C, 0 differ
+n=18: 1002 certificate values recomputed by Program C, 0 differ
+n=19: 1003 certificate values recomputed by Program C, 0 differ
+n=20: 1002 certificate values recomputed by Program C, 0 differ
+6. certificate sweep values vs SAVED Program A logs (A is not rerun here)
+n=4: 995 sweep values equal to Program A, 0 differ, 0 missing
+n=5: 994 sweep values equal to Program A, 0 differ, 0 missing
+n=6: 993 sweep values equal to Program A, 0 differ, 0 missing
+n=7: 992 sweep values equal to Program A, 0 differ, 0 missing
+n=8: 991 sweep values equal to Program A, 0 differ, 0 missing
+n=9: 990 sweep values equal to Program A, 0 differ, 0 missing
+n=10: 989 sweep values equal to Program A, 0 differ, 0 missing
+n=11: 988 sweep values equal to Program A, 0 differ, 0 missing
+n=12: 987 sweep values equal to Program A, 0 differ, 0 missing
+n=13: 986 sweep values equal to Program A, 0 differ, 0 missing
+n=14: 985 sweep values equal to Program A, 0 differ, 0 missing
+n=15: 984 sweep values equal to Program A, 0 differ, 0 missing
+n=16: 983 sweep values equal to Program A, 0 differ, 0 missing
+n=17: 982 sweep values equal to Program A, 0 differ, 0 missing
+n=18: 981 sweep values equal to Program A, 0 differ, 0 missing
+n=19: 980 sweep values equal to Program A, 0 differ, 0 missing
+n=20: 979 sweep values equal to Program A, 0 differ, 0 missing
+7. end-to-end: replay.sh itself must fail on a broken copy of this bundle
+ok   e2e_validatorC_fault: replay failed with: MISMATCH 3 9
+ok   e2e_validatorB_fault: replay failed with: MISMATCH 3 9
+ok   e2e_certificate_value: replay failed with: 1 differ
+ALL END-TO-END TESTS PASSED
+ALL CHECKS PASSED
+exit=0

@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+*.aux
+*.log
+*.out
+*.toc
+# Saved evidence logs are intentionally part of the existing curated snapshot.
+!logs/**
+!validation/**
